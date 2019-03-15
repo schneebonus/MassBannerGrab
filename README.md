@@ -14,5 +14,10 @@ Thouse information are compared to the classifications.json file and, if rated c
 
 ## Examples
 
+### Example 1: Anti-Virus websites
+
 ![Alt text](/screenshots/example_1.png?raw=true "Testing anti-virus websites")
+
+### Example 2: German Cities
+
 ![Alt text](/screenshots/example_2.png?raw=true "Testing german cities")
