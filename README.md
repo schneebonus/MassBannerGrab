@@ -21,3 +21,11 @@ Thouse information are compared to the classifications.json file and, if rated c
 ### Example 2: German Cities
 
 ![Alt text](/screenshots/example_2.png?raw=true "Testing german cities")
+
+
+## ToDos:
+
+- use /phpinfo.php
+- use /test.php
+- use /server-info
+- use /server-status
