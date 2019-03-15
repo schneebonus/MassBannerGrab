@@ -2,7 +2,7 @@
 
 Bannergrab a lot of websites and filter the result for servers and versions.
 
-# How does it work
+## How does it work
 
 MassBannerGrab reads a list of urls from a cvs file.
 Each line should contain one url. 
@@ -29,3 +29,4 @@ Thouse information are compared to the classifications.json file and, if rated c
 - use /test.php
 - use /server-info
 - use /server-status
+- more fancy fingerprinting
