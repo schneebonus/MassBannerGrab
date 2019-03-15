@@ -1,15 +1,10 @@
 import requests
 from collections import defaultdict
 import json
-
+import sys
 
 requests.packages.urllib3.disable_warnings()
 
-urls = []
-urls.append("http://www.iudicium.de/")     # Apache/2.4.38 (FreeBSD) OpenSSL/1.0.2r mod_fcgid/2.3.9 mod_wsgi/4.6.5 Python/2.7
-urls.append("http://www.gietl-verlag.de/") # nginx/1.14.0 (Ubuntu)
-urls.append("http://www.patmos.de/")
-urls.append("http://www.swiridoff.de/")
 
 def get_classifications():
     f = open("classification.json", "r")
@@ -27,33 +22,22 @@ def urls_from_file(filename):
     return urls
 
 def analyze(url):
-    #print("URL\t\t", url)
     header = get_header(url)
     servers = get_servers(url, header)
 
-    #print("Result:")
-
-    for server in servers:
-        #print("\tFound", server[0] , "in version", server[1])
-        pass
-    # print("")
     return servers
 
 
 def get_header(url):
     r = requests.get(url, verify=False, timeout=5.0)
-    #print("Statuscode:\t", r.status_code)
     return r
 
 def get_servers(url, header):
     server_list = ""
     if "Server" in header.headers:
         server_list += header.headers['Server'].replace(",", "")
-        # print("Server:\t\t", header.headers['Server'])
     if "X-Powered-By" in header.headers:
         server_list += " " + header.headers['X-Powered-By'].replace(",", "")
-        # print("X-Powered-By:\t\t", header.headers['X-Powered-By'])
-
     result = set()
     servers = server_list.split(" ")
     for server in servers:
@@ -80,22 +64,26 @@ def is_critical(name, version, classifications):
                 return True
     return False
 
-urls = urls_from_file("vpn.csv")
+if len(sys.argv) == 2:
+    filename = sys.argv[1]
 
-vuln = []
-classifications = get_classifications()
+    urls = urls_from_file(filename)
 
-for url in urls:
-    try:
-        servers = analyze(url)
-        # print(url)
-        # print(servers)
-        for server in servers:
-            name = server[0]
-            version = server[1]
-            url = server[2]
-            if is_critical(name, version, classifications):
-                print(name, "in version", version, "on", url)
-    except Exception as e:
-        pass
-        #print("Error", e)
+    vuln = []
+    classifications = get_classifications()
+
+    for url in urls:
+        try:
+            servers = analyze(url)
+            for server in servers:
+                name = server[0]
+                version = server[1]
+                url = server[2]
+                if is_critical(name, version, classifications):
+                    print(name, "in version", version, "on", url)
+        except Exception as e:
+            pass
+else:
+    print("Please provide one argument for the file of urls.")
+    print("Example:")
+    print("python3 grab.py vpn.csv")
