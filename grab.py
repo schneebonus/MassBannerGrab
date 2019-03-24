@@ -2,6 +2,7 @@ import requests
 from collections import defaultdict
 import json
 import sys
+import phpinfo
 
 requests.packages.urllib3.disable_warnings()
 
@@ -38,6 +39,7 @@ def get_servers(url, header):
         server_list += header.headers['Server'].replace(",", "")
     if "X-Powered-By" in header.headers:
         server_list += " " + header.headers['X-Powered-By'].replace(",", "")
+    server_list += phpinfo.process_url(url)
     result = set()
     servers = server_list.split(" ")
     for server in servers:
